@@ -1,0 +1,28 @@
+version: '3.2'
+
+services:
+  database:
+    image: mariadb:10.2
+    working_dir: /srv
+    volumes:
+      - database:/var/lib/mysql
+      - ./docker/mysql/config:/etc/mysql/mysql.conf.d/:ro
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+  # connection URL: DATABASE_URL="mysql://database:3306/app?serverVersion=mariadb-10.2.44&charset=utf8mb4"
+
+  php:
+    build: ./docker/php
+    working_dir: /srv
+    volumes:
+      - ./:/srv
+    ports:
+      - "8001:8000"
+
+  node:
+    build: ./docker/node
+    working_dir: /srv
+    volumes:
+      - ./:/srv
+volumes:
+  database: ~

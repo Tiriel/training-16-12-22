@@ -1,0 +1,18 @@
+version: '3.2'
+
+services:
+  database:
+    ports:
+      - "3306:3306" # Customize left part if you run many projects
+
+  php:
+    volumes:
+      - ~/.composer:/home/.composer
+
+  node:
+    volumes:
+      - ~/.npm:/home/.npm
+#  mailcatcher:
+#    image: jderusse/mailcatcher
+#    ports:
+#      - 8001:80
