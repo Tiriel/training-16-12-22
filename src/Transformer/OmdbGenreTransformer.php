@@ -9,8 +9,8 @@ class OmdbGenreTransformer implements DataTransformerInterface
 {
     public function transform(mixed $value): mixed
     {
-        if (empty($value)) {
-            return new Genre();
+        if (!\is_string($value)) {
+            throw new \InvalidArgumentException();
         }
         $value = (string) $value;
 

@@ -9,6 +9,10 @@ class OmdbMovieTransformer implements DataTransformerInterface
 {
     public function transform($value): Movie
     {
+        if (!\is_array($value) || !array_key_exists('Title', $value)) {
+            return new Movie();
+        }
+
         $date = $value['Released'] === 'N/A' ? $value['Year'] : $value['Released'];
 
         return (new Movie())

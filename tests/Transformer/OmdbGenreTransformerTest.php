@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class OmdbGenreTransformerTest extends TestCase
 {
-    public function testTransformWithStringReturnsGenreEntity(): void
+    public function testTransformWithStringReturnsGenreEntity()
     {
         $transformer = new OmdbGenreTransformer();
         $genre = $transformer->transform('Action');
@@ -17,21 +17,11 @@ class OmdbGenreTransformerTest extends TestCase
         $this->assertSame('Action', $genre->getName());
     }
 
-    public function testTransformWithArrayReturnsGenreEntity(): void
+    public function testTransformWithoutStringThrowsInvalidArgumentException(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $transformer = new OmdbGenreTransformer();
         $genre = $transformer->transform([]);
-
-        $this->assertInstanceOf(Genre::class, $genre);
-        $this->assertEmpty($genre->getName());
-    }
-
-    public function testTransformWithIntReturnsGenreEntity(): void
-    {
-        $transformer = new OmdbGenreTransformer();
-        $genre = $transformer->transform(1);
-
-        $this->assertInstanceOf(Genre::class, $genre);
-        $this->assertSame('1', $genre->getName());
     }
 }
