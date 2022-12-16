@@ -7,10 +7,24 @@ use Symfony\Component\Form\DataTransformerInterface;
 
 class OmdbMovieTransformer implements DataTransformerInterface
 {
+    public const KEYS = [
+        'Title',
+        'Poster',
+        'Country',
+        'Released',
+        'Year',
+        'imdbID',
+        'Rated',
+    ];
+
     public function transform($value): Movie
     {
-        if (!\is_array($value) || !array_key_exists('Title', $value)) {
-            return new Movie();
+        if (!\is_array($value)) {
+            throw new \InvalidArgumentException(sprintf("Argument \$value must be and array, %s given", gettype($value)));
+        }
+
+        if (\count($missing = array_diff(self::KEYS, array_keys($value))) > 0) {
+            throw new \InvalidArgumentException(sprintf("Missing keys in \$value argument: %s", implode(', ', $missing)));
         }
 
         $date = $value['Released'] === 'N/A' ? $value['Year'] : $value['Released'];

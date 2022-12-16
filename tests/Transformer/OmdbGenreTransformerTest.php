@@ -8,20 +8,35 @@ use PHPUnit\Framework\TestCase;
 
 class OmdbGenreTransformerTest extends TestCase
 {
-    public function testTransformWithStringReturnsGenreEntity()
+    private static OmdbGenreTransformer $transformer;
+
+    public static function setUpBeforeClass(): void
     {
-        $transformer = new OmdbGenreTransformer();
-        $genre = $transformer->transform('Action');
+        static::$transformer = new OmdbGenreTransformer();
+    }
+
+    /**
+     * @dataProvider provideGenreNames
+     */
+    public function testTransformWithStringReturnsGenreEntity(string $name)
+    {
+        $genre = static::$transformer->transform($name);
 
         $this->assertInstanceOf(Genre::class, $genre);
-        $this->assertSame('Action', $genre->getName());
+        $this->assertSame($name, $genre->getName());
     }
 
     public function testTransformWithoutStringThrowsInvalidArgumentException(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        $transformer = new OmdbGenreTransformer();
-        $genre = $transformer->transform([]);
+        $genre = static::$transformer->transform([]);
+    }
+
+    public function provideGenreNames(): \Generator
+    {
+        yield 'Action' => ['Action'];
+        yield 'Adventure' => ['Adventure'];
+        yield 'Fantasy' => ['Fantasy'];
     }
 }
